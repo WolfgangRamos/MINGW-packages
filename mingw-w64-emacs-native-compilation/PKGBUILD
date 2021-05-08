@@ -44,9 +44,9 @@ conflicts=("${MINGW_PACKAGE_PREFIX}-emacs")
 # Don't zip info files because the built-in info reader uses gzip to
 # decompress them. gzip is not available as a mingw binary.
 options=('strip' '!zipman')
-source=("emacs-git::git://git.savannah.gnu.org/emacs.git#branch=feature/native-comp")
+source=("emacs-git::git://git.savannah.gnu.org/emacs.git#branch=master")
 # If Savannah access is blocked for reasons, you can use Github instead.
-#source=("emacs-git::git://github.com/emacs-mirror/emacs.git#branch=feature/native-comp")
+#source=("emacs-git::git://github.com/emacs-mirror/emacs.git#branch=master")
 sha256sums=('SKIP')
 
 prepare() {
