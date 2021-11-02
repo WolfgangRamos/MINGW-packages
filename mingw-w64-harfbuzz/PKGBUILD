@@ -4,11 +4,11 @@
 _realname=harfbuzz
 pkgbase=mingw-w64-${_realname}
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}"
-pkgver=2.8.0
+pkgver=3.0.0
 pkgrel=1
 pkgdesc="OpenType text shaping engine (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url="https://www.freedesktop.org/wiki/Software/HarfBuzz"
 license=("MIT")
 makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
@@ -30,7 +30,7 @@ options=('strip' 'staticlibs')
 optdepends=("${MINGW_PACKAGE_PREFIX}-icu: harfbuzz-icu support"
             "${MINGW_PACKAGE_PREFIX}-cairo: hb-view program")
 source=("https://github.com/harfbuzz/harfbuzz/archive/${pkgver}.tar.gz")
-sha256sums=('9444358d1d8c1884c3a25b02fe702bd244172c4fdd2e98f5a165bc0987ef34f6')
+sha256sums=('55f7e36671b8c5569b6438f80efed2fd663298f785ad2819e115b35b5587ef69')
 noextract=("${pkgver}.tar.gz")
 
 prepare() {
@@ -62,6 +62,7 @@ build() {
     -Dicu=enabled \
     -Dgdi=enabled \
     -Dgraphite=enabled \
+    -Dchafa=disabled \
     -Ddirectwrite=enabled \
     ../${_realname}-${pkgver}
 
@@ -84,6 +85,7 @@ build() {
     -Dicu=enabled \
     -Dgdi=enabled \
     -Dgraphite=enabled \
+    -Dchafa=disabled \
     -Ddirectwrite=enabled \
     ../${_realname}-${pkgver}
 

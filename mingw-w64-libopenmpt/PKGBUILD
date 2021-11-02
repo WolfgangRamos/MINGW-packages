@@ -3,11 +3,11 @@
 _realname=libopenmpt
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=0.4.19
+pkgver=0.4.24
 pkgrel=1
 pkgdesc="A cross-platform C++ and C library to decode tracked music files (modules) into a raw PCM audio stream (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url="https://lib.openmpt.org"
 license=("BSD")
 depends=("${MINGW_PACKAGE_PREFIX}-zlib"
@@ -21,7 +21,13 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-gcc"
              "${MINGW_PACKAGE_PREFIX}-pkg-config")
 options=('staticlibs' 'strip')
 source=("https://lib.openmpt.org/files/${_realname}/src/${_realname}-${pkgver}+release.autotools.tar.gz")
-sha256sums=('1b9897c30d5f2897b769aeaa26856d6b3e49672a99dd0886c99e14e9485b0dd4')
+sha256sums=('06a65906904cdebc32bcc6d348c5ecd0ce06d19f48c96a081597db238c652142')
+
+prepare() {
+  cd "${srcdir}/${_realname}-${pkgver}+release.autotools"
+  # autoreconf to get updated libtool files with clang support
+  autoreconf -fiv
+}
 
 build() {
   [[ -d ${srcdir}/build-${CARCH} ]] && rm -rf ${srcdir}/build-${CARCH}

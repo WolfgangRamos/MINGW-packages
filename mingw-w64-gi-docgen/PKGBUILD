@@ -1,14 +1,14 @@
-# Maintainer: @naveen521kk on Github, Naveen M K <naveen@syrusdark.website>
+# Maintainer: @naveen521kk on Github, Naveen M K <naveen521kk@gmail.com>
 
 _pyname=gi-docgen
 _realname=gi-docgen
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=2021.2.r486.c633261
+pkgver=2021.8
 pkgrel=1
 pkgdesc='Documentation tool for GObject-based libraries (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url="https://gitlab.gnome.org/GNOME/gi-docgen"
 license=('GPL3' 'Apache2.0' 'CC0-1.0')
 depends=(
@@ -22,16 +22,15 @@ depends=(
 makedepends=(
   "${MINGW_PACKAGE_PREFIX}-python-setuptools"
 )
-_commit=c6332610a09612d91f41d32cac5f7cdf758694a7
 source=(
-  "${_pyname}-${_commit}.tar.gz::${url}/-/archive/${_commit}/${_realname}-${_commit}.tar.gz"
+  "${_pyname}-${pkgver}.tar.gz::https://pypi.org/packages/source/${_pyname::1}/${_pyname}/${_pyname}-${pkgver}.tar.gz"
 )
-sha256sums=('d6b7e65b8cf60f8c118ab120a978e697e209964f16e9e3567ec9a47c6f777124')
+sha256sums=('5479f14fd7c918c5d5445b89ef35db1b1d3e95834c723881cdfc3c3aa048d18e')
 
 prepare() {  
   cd "$srcdir"
   rm -rf python-build-${CARCH} | true
-  cp -r "${_pyname//_/-}-$_commit" "python-build-${CARCH}"
+  cp -r "${_pyname//_/-}-$pkgver" "python-build-${CARCH}"
   export SETUPTOOLS_SCM_PRETEND_VERSION=${pkgver}
 }
 

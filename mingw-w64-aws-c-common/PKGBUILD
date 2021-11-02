@@ -3,11 +3,11 @@
 _realname=aws-c-common
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=0.5.2
+pkgver=0.6.15
 pkgrel=1
 pkgdesc="Core c99 package for AWS SDK for C. Includes cross-platform primitives, configuration, data structures, and error handling (mingw-w64)."
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url="https://github.com/awslabs/aws-c-common"
 license=('Apache-2.0')
 depends=("${MINGW_PACKAGE_PREFIX}-gcc-libs")
@@ -15,18 +15,19 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-cmake"
              "${MINGW_PACKAGE_PREFIX}-ninja")
 conflicts=("${MINGW_PACKAGE_PREFIX}-aws-sdk-cpp<1.8.149")
 options=('strip' '!debug' 'staticlibs')
-source=("${_realname}-${pkgver}.tar.gz"::"${url}/archive/v${pkgver}.tar.gz"
-        "0001-check-msc-ver-instead-win32.patch")
+source=("${_realname}-${pkgver}.tar.gz"::"${url}/archive/v${pkgver}.tar.gz")
 noextract=("${_realname}-${pkgver}.tar.gz")
-sha256sums=('d5f7d8df331efb2591801b512f00b0a352e45f94df61afc343106c7b9035c920'
-            '709a8839f1c983a7a42104bd537606a6ebed00880f92f450b4ee183508a554cd')
+sha256sums=('eb3ead3fb7a1f09c046393f776a96a0f50ae5f38c70d462273084280383669f1')
 
 prepare() {
   [[ -d "${srcdir}/${_realname}-${pkgver}" ]] && rm -rf "${srcdir}/${_realname}-${pkgver}"
   tar -xf "${srcdir}/${_realname}-${pkgver}.tar.gz" -C "${srcdir}" 2>/dev/null || true
 
   cd "${srcdir}/${_realname}-${pkgver}"
-  patch -Np1 -i "${srcdir}/0001-check-msc-ver-instead-win32.patch"
+  sed -i "s/_MSC_VER/_WIN32/g" include/aws/common/byte_order.inl
+
+  # Workaround for build failure in clang due to non-ascii file names
+  rm -f tests/resources/* || true
 }
 
 build() {
@@ -41,6 +42,7 @@ build() {
   [[ -d "${srcdir}/build-${CARCH}-static" ]] && rm -rf "${srcdir}/build-${CARCH}-static"
   mkdir -p "${srcdir}/build-${CARCH}-static" && cd "${srcdir}/build-${CARCH}-static"
 
+  CFLAGS+=" -Wno-format" \
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
   ${MINGW_PREFIX}/bin/cmake.exe \
     -G "Ninja" \
@@ -55,6 +57,7 @@ build() {
   [[ -d "${srcdir}/build-${CARCH}-shared" ]] && rm -rf "${srcdir}/build-${CARCH}-shared"
   mkdir -p "${srcdir}/build-${CARCH}-shared" && cd "${srcdir}/build-${CARCH}-shared"
 
+  CFLAGS+=" -Wno-format" \
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
   ${MINGW_PREFIX}/bin/cmake.exe \
     -G "Ninja" \

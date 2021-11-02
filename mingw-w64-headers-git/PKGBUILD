@@ -4,11 +4,11 @@ _realname=headers
 pkgbase=mingw-w64-${_realname}-git
 pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
 pkgdesc="MinGW-w64 headers for Windows"
-pkgver=9.0.0.6144.45def5d7
-pkgrel=2
-_commit='45def5d7a10885dfb87af3c7996f8de7197183b5'
+pkgver=9.0.0.6327.f29c1101f
+pkgrel=1
+_commit='f29c1101f81d74509514319e0e651dae4f7a4e6c'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32' 'clangarm64')
 url="https://mingw-w64.sourceforge.io/"
 license=('custom')
 groups=("${MINGW_PACKAGE_PREFIX}-toolchain")
@@ -18,19 +18,14 @@ conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 options=('!strip' '!libtool' '!emptydirs')
 source=("mingw-w64"::"git+https://git.code.sf.net/p/mingw-w64/mingw-w64#commit=$_commit"
         0001-Allow-to-use-bessel-and-complex-functions-without-un.patch
-        0002-DirectX-9-fixes-for-VLC.patch
-        0003-headers-Move-some-structure-from-ws2tcpip.h-to-ws2ip.patch)
+        0002-DirectX-9-fixes-for-VLC.patch)
 sha256sums=('SKIP'
             'd641257f7e1469aff89adc33e57702b75fe9667ca035978f890eae1020b6814c'
-            '09b1c7b62f666a07609af57e10c2b0ad815b78356f4b0f1fb6d827a1109a0ec7'
-            '40ae31ae9c220a7f6ddac443ab8df56c95c85185e6c9b76d5da535bd18b6a409')
+            '09b1c7b62f666a07609af57e10c2b0ad815b78356f4b0f1fb6d827a1109a0ec7')
 
 pkgver() {
   cd "${srcdir}/mingw-w64"
-  local _major=$(head -n 16 mingw-w64-headers/crt/_mingw_mac.h | grep '__MINGW64_VERSION_MAJOR' | sed -e 's/.* //' | tr '\n' '.' | sed 's/.$/\n/')
-  local _minor=$(head -n 16 mingw-w64-headers/crt/_mingw_mac.h | grep '__MINGW64_VERSION_MINOR' | sed -e 's/.* //' | tr '\n' '.' | sed 's/.$/\n/')
-  local _rev=0
-  printf "%s.%s.%s.%s.%s" ${_major} ${_minor} ${_rev} "$(git rev-list --count $_commit)" "$(git rev-parse --short $_commit)"
+  printf "9.0.0.%s.%s" "$(git rev-list --count $_commit)" "$(git rev-parse --short $_commit)"
 }
 
 prepare() {
@@ -38,9 +33,6 @@ prepare() {
 
   git am --committer-date-is-author-date "${srcdir}/0001-Allow-to-use-bessel-and-complex-functions-without-un.patch"
   git am --committer-date-is-author-date "${srcdir}/0002-DirectX-9-fixes-for-VLC.patch"
-
-  # https://github.com/msys2/MINGW-packages/issues/8232
-  git am --committer-date-is-author-date "${srcdir}/0003-headers-Move-some-structure-from-ws2tcpip.h-to-ws2ip.patch"
 
   cd ${srcdir}/mingw-w64/mingw-w64-headers
   touch include/windows.*.h include/wincrypt.h include/prsht.h

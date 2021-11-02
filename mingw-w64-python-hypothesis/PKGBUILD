@@ -6,11 +6,11 @@ pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
 provides=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 conflicts=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 replaces=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
-pkgver=6.8.4
+pkgver=6.23.3
 pkgrel=1
 pkgdesc="Advanced Quickcheck style testing library for Python (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url='https://hypothesis.readthedocs.org'
 license=('MIT')
 depends=("${MINGW_PACKAGE_PREFIX}-python-attrs"
@@ -34,7 +34,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-python-setuptools")
 #              "${MINGW_PACKAGE_PREFIX}-python-pandas")
 options=('staticlibs' 'strip' '!debug')
 source=("${_realname}-${pkgver}.tar.gz"::"https://github.com/HypothesisWorks/hypothesis/archive/hypothesis-python-${pkgver}.tar.gz")
-sha512sums=('bb1c14aedf51bee4394c6b27d9c92d5c13b1d1e690608efff0cb68ae3ae7e8a078c99c10d0f1c4a6977430c8ebefea083af1be28f1535f93e320579614c9f46c')
+sha512sums=('9212076c61175960fd638b9b75b8a0f51b75969c93c6b5b2aedacadfc08860931b8f1bfad21b34ca34c0ee64609b34b3027342bbf093aa0e5c304706f081f60a')
 
 # Helper macros to help make tasks easier #
 apply_patch_with_msg() {

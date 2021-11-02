@@ -6,11 +6,11 @@ pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
 provides=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 conflicts=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
 replaces=("${MINGW_PACKAGE_PREFIX}-python3-${_realname}")
-pkgver=5.0.5
+pkgver=5.1.0
 pkgrel=1
 pkgdesc="Python Decorator module (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url='https://pypi.python.org/pypi/decorator'
 license=('BSD')
 depends=("${MINGW_PACKAGE_PREFIX}-python")
@@ -18,7 +18,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-python-setuptools")
 options=('staticlibs' 'strip' '!debug')
 source=(#"${_realname}-${pkgver}.tar.gz"::"https://github.com/micheles/decorator/archive/${pkgver}.tar.gz"
         "https://pypi.python.org/packages/source/${_realname:0:1}/${_realname}/${_realname}-${pkgver}.tar.gz")
-sha512sums=('ba5269de8d7821547348902917dc503582ca4576482c149b42a8b3407d901cb14700996992dc9743a990a6bf347c80966bc82b92ffe95b7b0034736c3fbcaf83')
+sha512sums=('4acc0967af79f61c56adea3084c4e9f9de1c34fcbc7906db4bb1b0759e07ffed6eff0e4b21645dda5f37e96662742621f3d043e8c06a401841c7199a915afe18')
 
 prepare() {
   cd "${srcdir}"

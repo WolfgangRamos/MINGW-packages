@@ -1,13 +1,13 @@
-# Maintainer: @naveen521kk on Github, Naveen M K <naveen@syrusdark.website>
+# Maintainer: @naveen521kk on Github, Naveen M K <naveen521kk@gmail.com>
 
 _realname=manimpango
 pkgbase=mingw-w64-python-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-python-${_realname}")
-pkgver=0.2.5.post0
+pkgver=0.3.1
 pkgrel=1
 pkgdesc="Bindings for Pango for using with Manim. (mingw-w64)"
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url='https://github.com/ManimCommunity/ManimPango'
 license=('GPL3')
 depends=("${MINGW_PACKAGE_PREFIX}-python"
@@ -15,7 +15,7 @@ depends=("${MINGW_PACKAGE_PREFIX}-python"
 makedepends=("${MINGW_PACKAGE_PREFIX}-cython"
              "${MINGW_PACKAGE_PREFIX}-python-setuptools")
 source=("${_realname}-${pkgver}.tar.gz"::"https://github.com/ManimCommunity/ManimPango/releases/download/v${pkgver}/manimpango-${pkgver}.tar.gz")
-sha512sums=('10c0ffc0f5bdb4ba3a3e7d12153a3416c7331c3aa5b7c413a2230bf1c4cb1ca5f6a26d6e7e3b47a28062ebdbc0695ff4b619931c6034a35ce360ba3561a8189a')
+sha512sums=('9f50dc732259550123d0494dcb217dcad22effe286e63e095aa234a85f1e87317f01f91a2a6d8e027dea7a65fac1383bcbc5242ca7200b7efe0c661ad7d67d25')
 
 prepare() {
   # Force cython rebuild

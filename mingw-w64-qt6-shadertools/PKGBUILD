@@ -2,42 +2,69 @@
 
 _realname=qt6-shadertools
 pkgbase=mingw-w64-${_realname}
-pkgname=${MINGW_PACKAGE_PREFIX}-${_realname}
-_qtver=6.0.3
+pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}"
+         "${MINGW_PACKAGE_PREFIX}-${_realname}-debug")
+_qtver=6.2.1
 pkgver=${_qtver/-/}
 pkgrel=1
 arch=(any)
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64' 'clang32')
 url='https://www.qt.io'
 license=(GPL3 LGPL3 FDL custom)
 pkgdesc='Experimental module providing APIs and a host tool to host tool to perform graphics and compute shader conditioning for the upcoming Qt graphics abstraction layer (mingw-w64)'
-depends=("${MINGW_PACKAGE_PREFIX}-qt6-base")
 makedepends=("${MINGW_PACKAGE_PREFIX}-cmake"
-             "${MINGW_PACKAGE_PREFIX}-ninja")
-groups=(${MINGW_PACKAGE_PREFIX}-qt6)
+             "${MINGW_PACKAGE_PREFIX}-ninja"
+             "${MINGW_PACKAGE_PREFIX}-qt6-base"
+             "${MINGW_PACKAGE_PREFIX}-vulkan-headers"
+             "rsync")
+options=('!strip')
 _pkgfn="${_realname/6-/}-everywhere-src-${_qtver}"
 source=("https://download.qt.io/official_releases/qt/${pkgver%.*}/$_qtver/submodules/$_pkgfn.tar.xz")
-sha256sums=('3649696a5148bdebff1917ed49b9fe2a7c1533d9351cbe371aa7e6ae303e00c1')
+sha256sums=('2c8d38724181b31cd828a56e377775c2d461ee2ea0d6362ebec411c3b288067e')
 
 build() {
   cd ${srcdir}
-  [[ -d build-${MINGW_CHOST} ]] && rm -rf build-${MINGW_CHOST}
-  mkdir -p build-${MINGW_CHOST}
-  cd build-${MINGW_CHOST}
+  [[ -d build-${MSYSTEM} ]] && rm -rf build-${MSYSTEM}
+  mkdir -p build-${MSYSTEM} && cd build-${MSYSTEM}
 
   MSYS2_ARG_CONV_EXCL="-DCMAKE_INSTALL_PREFIX=" \
-  ${MINGW_PREFIX}/bin/cmake.exe \
+  cmake \
     -GNinja \
-    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DCMAKE_INSTALL_PREFIX=${MINGW_PREFIX} \
     ../${_pkgfn}
 
-  ninja
+  cmake --build .
 }
 
-package() {
-  DESTDIR=${pkgdir} cmake --install build-${MINGW_CHOST}
+package_qt6-shadertools() {
+  depends=("${MINGW_PACKAGE_PREFIX}-qt6-base")
+  groups=("${MINGW_PACKAGE_PREFIX}-qt6")
+
+  DESTDIR=${pkgdir} cmake --install build-${MSYSTEM}
+
+  # Seperate debug-info files
+  rsync -armR --remove-source-files --include="*/" --include="*.debug" --exclude="*" --prune-empty-dirs ${pkgdir}/.${MINGW_PREFIX} ${srcdir}/${MSYSTEM}-debug/
 
   install -d "$pkgdir${MINGW_PREFIX}"/share/licenses/${_realname}
   install -Dm644 $_pkgfn/LICENSE* -t "$pkgdir${MINGW_PREFIX}"/share/licenses/${_realname}
 }
+
+package_qt6-shadertools-debug() {
+  depends=("${MINGW_PACKAGE_PREFIX}-qt6-base-debug"
+           "${MINGW_PACKAGE_PREFIX}-${_realname}")
+  groups=("${MINGW_PACKAGE_PREFIX}-qt6-debug")
+
+  cp -rf ${srcdir}/${MSYSTEM}-debug${MINGW_PREFIX} "${pkgdir}"/
+}
+
+# template start; name=mingw-w64-splitpkg-wrappers; version=1.0;
+# vim: set ft=bash :
+
+# generate wrappers
+for _name in "${pkgname[@]}"; do
+  _short="package_${_name#${MINGW_PACKAGE_PREFIX}-}"
+  _func="$(declare -f "${_short}")"
+  eval "${_func/#${_short}/package_${_name}}"
+done
+# template end;

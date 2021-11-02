@@ -3,21 +3,20 @@
 _realname=tfel
 pkgbase=mingw-w64-${_realname}
 pkgname=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=3.4.0
+pkgver=3.4.3
 pkgrel=1
 pkgdesc='MFront: a code generation tool dedicated to material knowledge (mingw-w64)'
 arch=('any')
-mingw_arch=('mingw32' 'mingw64' 'ucrt64')
+mingw_arch=('mingw32' 'mingw64' 'ucrt64' 'clang64')
 provides=('mfront')
 depends=("${MINGW_PACKAGE_PREFIX}-gnuplot")
 makedepends=("unzip"
              "${MINGW_PACKAGE_PREFIX}-ninja"
              "${MINGW_PACKAGE_PREFIX}-cmake")
-#optdepends=("")
 license=('GPL')
-url='http://tfel.sourceforge.net'
+url='https://tfel.sourceforge.io/'
 source=(https://github.com/thelfer/${_realname}/archive/TFEL-${pkgver}.zip)
-sha256sums=('603FE64C2FD1584F233B08200C57F65D1214EB741B85FD636172DA3E369467E5')
+sha256sums=('C7B2EB16AF81DC3A61234A88FCC9EF8401ACDE5EC69D107C99644B74E4D1557A')
 noextract=("TFEL-${pkgver}.zip") # bsdtar could not unpack this archive
 
 prepare() {  
