@@ -24,6 +24,7 @@ depends=("${MINGW_PACKAGE_PREFIX}-universal-ctags-git"
          "${MINGW_PACKAGE_PREFIX}-libgccjit")
 optdepends=("${MINGW_PACKAGE_PREFIX}-giflib"
             "${MINGW_PACKAGE_PREFIX}-libjpeg-turbo"
+            "${MINGW_PACKAGE_PREFIX}-diffutils" # used by magit for diffing
             "${MINGW_PACKAGE_PREFIX}-libpng"
             "${MINGW_PACKAGE_PREFIX}-librsvg"
             "${MINGW_PACKAGE_PREFIX}-libtiff"
